@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Northeastern University Cricket Club</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <meta name="description" content="Official website for Northeastern University Cricket Club — news, fixtures, roster, and joining information.">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand">
+        <img src="images/logo.svg" alt="Northeastern University Cricket Club logo">
+        <div>
+          <strong>Northeastern University Cricket Club</strong><br>
+          <span class="small">Boston, MA · Est. 2006</span>
+        </div>
+      </div>
+      <nav aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#fixtures">Fixtures</a>
+        <a href="#join">Join</a>
+        <a href="#media">Media</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="container hero" id="about">
+    <article>
+      <h1>Cricket at Northeastern <span class="badge">Club Sport</span></h1>
+      <p>Welcome to the official home of the Northeastern University Cricket Club (NUCC). We practice weekly, compete across collegiate leagues, and grow the game on campus.</p>
+      <p>Whether you're a seasoned all‑rounder or brand new to the sport, there's a spot for you. Scroll to see fixtures, media, and how to join.</p>
+      <a class="button" href="#join">Become a Husky</a>
+    </article>
+    <figure>
+      <img src="images/field.jpeg" alt="Illustration of a cricket field with pitch and circle">
+      <figcaption>Our home practices are on a synthetic wicket near campus.</figcaption>
+    </figure>
+  </section>
+
+  <main class="container">
+    <section class="section" aria-labelledby="fixtures-title" id="fixtures">
+      <h2 id="fixtures-title">Upcoming Fixtures</h2>
+      <p class="small">Fall 2025 pre‑season schedule. Subject to change.</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Opponent</th>
+              <th>Format</th>
+              <th>Venue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sep 20, 2025</td>
+              <td>Boston University</td>
+              <td>T20</td>
+              <td>NU Rec Fields</td>
+            </tr>
+            <tr>
+              <td>Oct 04, 2025</td>
+              <td>UMass Amherst</td>
+              <td>40 Overs</td>
+              <td>Harold Parker</td>
+            </tr>
+            <tr>
+              <td>Oct 18, 2025</td>
+              <td>Harvard</td>
+              <td>T20</td>
+              <td>Jordan Field</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p><a href="https://www.northeastern.edu/campusrec/" target="_blank" rel="noopener">Explore NU Club Sports</a></p>
+    </section>
+
+    <aside aria-label="Sidebar">
+      <h3>Practice Snapshot</h3>
+      <p>Mondays & Wednesdays · 6–8pm</p>
+      <details class="details">
+        <summary>What to bring</summary>
+        <ul>
+          <li>Water & athletic shoes</li>
+          <li>Gloves/guard (optional—we have loaners)</li>
+        </ul>
+      </details>
+      <h3>Quick Links</h3>
+      <a href="#join">Join NUCC</a>
+      <a href="#media">Media</a>
+      <a href="#contact">Contact</a>
+    </aside>
+  </main>
+
+  <section class="container section" id="join" aria-labelledby="join-title">
+    <article>
+      <h2 id="join-title">Join the Club</h2>
+      <p>Fill out the interest form below and we'll reach out with next steps.</p>
+
+      <form action="#" method="post" autocomplete="on">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" name="fullName" placeholder="First Last" required>
+
+        <label for="email">NU Email</label>
+        <input type="email" id="email" name="email" placeholder="you@northeastern.edu" required>
+
+        <label for="password">Create a password <span class="small">(for our members portal)</span></label>
+        <input type="password" id="password" name="password" minlength="8" required>
+
+        <label for="role">Primary Role</label>
+        <input list="roles" id="role" name="role" placeholder="Choose or type">
+        <datalist id="roles">
+          <option value="Batter">
+          <option value="Bowler">
+          <option value="All-rounder">
+          <option value="Wicket-keeper">
+          <option value="Coach/Support">
+        </datalist>
+
+        <label for="campus">Campus</label>
+        <input list="campuses" id="campus" name="campus" placeholder="Boston">
+        <datalist id="campuses">
+          <option value="Boston">
+          <option value="Oakland">
+          <option value="Vancouver">
+          <option value="London">
+          <option value="Arlington">
+        </datalist>
+
+        <button class="button" type="submit">Submit Interest</button>
+      </form>
+    </article>
+  </section>
+
+  <section class="container section" id="media" aria-labelledby="media-title">
+    <h2 id="media-title">Media</h2>
+    <article>
+      <h3>Theme Audio</h3>
+      <audio controls>
+        <source src="media/club-theme.wav" type="audio/wav" />
+        Your browser does not support the audio element.
+      </audio>
+    </article>
+
+    <div class="HighlightVideo">
+    <article style="margin-top:16px">
+      <h3>Highlight Video</h3>
+      <video controls width="320" poster="images/field.jpeg">
+      <source src="media/CricketVideo.mov" type="video/mp4"/>
+      Your browser does not support the video tag. Replace <code>media/CricketVideo.mov</code> with a club clip.
+      </video>
+    </article>
+    </div>
+  </section>
+
+  <footer id="contact" role="contentinfo">
+    <div class="container">
+      <p><strong>Contact</strong></p>
+      <p>Phone: <a href="tel:+16175550123">+1 (617) 555‑0123</a> · Email: <a href="mailto:cricket@northeastern.edu">cricket@northeastern.edu</a></p>
+    </div>
+  
+  </footer>
+</body>
+</html>

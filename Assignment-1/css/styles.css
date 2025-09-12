@@ -1,0 +1,66 @@
+:root{
+  --nu-red:#cc0000;
+  --nu-black:#000000;
+  --nu-gray:#f5f5f5;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  color:#111; background:#fff;
+}
+header{
+  background: var(--nu-black);
+  color:#fff;
+  position:sticky; top:0; z-index:1000;
+  border-bottom:4px solid var(--nu-red);
+}
+.container{max-width:1100px;margin:0 auto;padding:clamp(12px,2vw,20px)}
+.brand{display:flex; align-items:center; gap:12px}
+.brand img{height:42px}
+nav{display:flex; gap:18px; flex-wrap:wrap; margin-top:10px}
+nav a{
+  color:#fff; text-decoration:none; padding:8px 12px; border-radius:999px;
+  border:1px solid rgba(255,255,255,0.2)
+}
+nav a:hover{background:#fff; color:#000}
+main{display:grid; grid-template-columns:3fr 1fr; gap:24px}
+@media (max-width: 900px){
+  main{grid-template-columns:1fr}
+}
+.hero{
+  background:linear-gradient(135deg, var(--nu-red), #e53935);
+  color:#fff; border-radius:20px; padding:32px; margin-top:16px;
+  display:grid; grid-template-columns:1.2fr 1fr; gap:20px; align-items:center;
+}
+.hero img{width:100%; border-radius:16px; background:#fff}
+.section{padding-block:28px; border-bottom:1px solid #eee}
+h1,h2{letter-spacing:.3px}
+table{width:100%; border-collapse:collapse; font-size:15px}
+th, td{padding:10px 12px; border-bottom:1px solid #e5e5e5}
+th{background:#fafafa; text-align:left}
+.badge{display:inline-block; padding:4px 10px; background:#111; color:#fff; border-radius:999px; font-size:12px}
+aside{background:var(--nu-gray); padding:18px; border-radius:16px; position:sticky; top:90px; height:fit-content}
+aside a{display:block; margin:6px 0}
+footer{
+  background:#111; color:#fff; margin-top:24px; padding:20px 0; border-top:4px solid var(--nu-red);
+}
+.button{
+  appearance:none; border:0; background:var(--nu-red); color:#fff; padding:10px 16px;
+  border-radius:12px; cursor:pointer; font-weight:600
+}
+.button:hover{filter:brightness(.95)}
+form{
+  display:grid; gap:12px; background:#fafafa; padding:16px; border:1px solid #eee; border-radius:12px
+}
+input, select, datalist, textarea{
+  width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font:inherit
+}
+figure{margin:0}
+figcaption{font-size:13px; color:#555; margin-top:6px}
+.details{background:#fafafa; border:1px solid #eee; border-radius:12px; padding:12px}
+.small{font-size:12px; color:#666}
+/* .HighlightVideo{transform: rotate(270deg);
+  transform-origin: center center;
+  display: inline-block;} */

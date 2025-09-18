@@ -1,0 +1,111 @@
+/* basic reset */
+body {
+  font-family: Arial;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: lightblue;
+  padding: 10px;
+  text-align: center;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 10px;
+}
+
+nav a {
+  text-decoration: none;
+  color: black;
+}
+
+section {
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+table th, table td {
+  border: 1px solid black;
+  padding: 8px;
+}
+table th {
+  background: lightgray;
+}
+
+/* Testimonials */
+.testimonials {
+  display: flex;
+  gap: 10px;
+}
+.testimonial {
+  border: 1px solid gray;
+  padding: 10px;
+  width: 45%;
+}
+
+/* Gallery */
+.gallery {
+  display: flex;
+  gap: 10px;
+}
+.gallery img {
+  border: 2px solid black;
+  width: 30%;
+}
+
+/* Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 300px;
+}
+input, textarea, button {
+  padding: 8px;
+  border: 1px solid black;
+}
+button {
+  background: lightgreen;
+  cursor: pointer;
+}
+
+/* Footer */
+footer {
+  background: lightblue;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .testimonials {
+    flex-direction: column;
+  }
+  .gallery {
+    flex-direction: column;
+  }
+  .gallery img {
+    width: 100%;
+  }
+}
+
+@media (max-width: 375px) {
+  nav ul li {
+    display: block;
+    margin: 5px 0;
+  }
+}

@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Assignment 3 — Student Table</title>
+  <style>
+    :root{--gray:#ddd;--orange:#ff9800;--yellow:#fff59d}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;line-height:1.4;margin:20px;background:#f7f7fb;color:#111}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    h1{font-size:20px;margin:0}
+    .meta{font-size:14px;color:#333}
+    .controls{display:flex;gap:8px;align-items:center}
+    button{padding:8px 12px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);cursor:pointer;background:white}
+    button:disabled{cursor:not-allowed}
+    #addBtn{background:#e6f7eb}
+    #submitBtn{background:var(--gray);border-color:transparent}
+    #submitBtn.enabled{background:var(--orange);color:white}
+    table{width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.04)}
+    caption{padding:10px 14px;text-align:left;font-weight:600}
+    thead th{background:#f2f4f7;padding:10px 12px;text-align:left;border-bottom:1px solid #e6e9ee}
+    tbody td{padding:10px 12px;border-bottom:1px solid #f0f0f4}
+    tbody tr.selected{background:var(--yellow)}
+    .icon{width:20px;height:20px;display:inline-block;vertical-align:middle;cursor:pointer}
+    .arrow{transform:rotate(0deg);transition:transform .18s ease}
+    .arrow.open{transform:rotate(90deg)}
+    .small{font-size:13px;color:#555}
+    .actions button{margin-right:6px}
+    /* modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center}
+    .modal{background:white;padding:18px;border-radius:10px;min-width:320px;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+    .modal h3{margin:0 0 8px 0}
+    .modal .row{margin:8px 0}
+    .expanded-row td{background:#fbfcff;color:#222;padding:12px;border-bottom:1px solid #eee}
+    /* responsive */
+    @media (max-width:640px){table{font-size:13px} .controls{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Dynamic Student Table — Assignment 3</h1>
+      <div class="meta">Full Name: <strong id="fullName">Sharath Reddy Gummadi</strong> — NUID: <strong id="nuid">002500182</strong></div>
+    </div>
+    <div class="controls">
+      <button id="addBtn">➕ Add New Student</button>
+      <button id="submitBtn" disabled>Submit</button>
+    </div>
+  </header>
+
+  <main>
+    <table id="studentsTable">
+      <caption>Students list</caption>
+      <thead>
+        <tr>
+          <th></th>
+          <th>#</th>
+          <th>Name</th>
+          <th>Teacher</th>
+          <th>Grade</th>
+          <th>EDIT</th>
+          <th>DELETE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- initial rows inserted by JS -->
+      </tbody>
+      <tfoot>
+        <tr><td colspan="7" class="small" style="padding:10px 12px">Instructions: Select rows to enable Submit and show Edit/Delete actions. Click green arrow to expand row.</td></tr>
+      </tfoot>
+    </table>
+  </main>
+
+  <!-- modal for editing -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
+    <div class="modal" role="document">
+      <h3 id="modalTitle">Edit details</h3>
+      <div class="row"><input id="modalInput" type="text" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"/></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+        <button id="modalCancel">Cancel</button>
+        <button id="modalOk">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- CONFIG: replace with your own name & NUID if you like ---
+    const CONFIG = { fullName: 'Sharath Reddy Gummadi', nuid: '002500182' };
+    document.getElementById('fullName').textContent = CONFIG.fullName;
+    document.getElementById('nuid').textContent = CONFIG.nuid;
+
+    // Helper: create green arrow SVG
+    function createArrowSVG(){
+      const svg = document.createElement('span');
+      svg.className = 'icon';
+      svg.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#2e7d32" d="M10 17l5-5-5-5v10z"/></svg>';
+      return svg;
+    }
+
+    // initial data
+    let data = [
+      {id:1,name:'Student 1',teacher:'Teacher 1',grade:'A'},
+      {id:2,name:'Student 2',teacher:'Teacher 2',grade:'B+'},
+      {id:3,name:'Student 3',teacher:'Teacher 3',grade:'A-'}
+    ];
+
+    const tbody = document.querySelector('#studentsTable tbody');
+    const addBtn = document.getElementById('addBtn');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Render table rows
+    function render(){
+      tbody.innerHTML = '';
+      data.sort((a,b)=>a.id-b.id);
+      data.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = item.id;
+
+        // arrow cell
+        const tdArrow = document.createElement('td');
+        const arrow = createArrowSVG();
+        arrow.classList.add('arrow');
+        arrow.title = 'Expand/Collapse';
+        tdArrow.appendChild(arrow);
+        tr.appendChild(tdArrow);
+
+        // checkbox as # column is separate per requirement? We'll put checkbox in first column
+        const tdNum = document.createElement('td');
+        tdNum.textContent = item.id;
+        tr.appendChild(tdNum);
+
+        const tdName = document.createElement('td'); tdName.textContent = item.name; tr.appendChild(tdName);
+        const tdTeacher = document.createElement('td'); tdTeacher.textContent = item.teacher; tr.appendChild(tdTeacher);
+        const tdGrade = document.createElement('td'); tdGrade.textContent = item.grade; tr.appendChild(tdGrade);
+
+        // edit & delete columns (placeholders — buttons will be added dynamically on select)
+        const tdEdit = document.createElement('td'); tdEdit.className='actions edit-col'; tr.appendChild(tdEdit);
+        const tdDelete = document.createElement('td'); tdDelete.className='actions delete-col'; tr.appendChild(tdDelete);
+
+        // Add a hidden checkbox overlay (we'll detect clicks on row to toggle) — but requirement says selecting checkboxes; so add checkbox left of number
+        const checkbox = document.createElement('input'); checkbox.type='checkbox'; checkbox.className='row-checkbox'; checkbox.style.marginRight='8px';
+        tdArrow.prepend(checkbox);
+
+        // event: checkbox change
+        checkbox.addEventListener('change', (e)=>{
+          handleRowSelection(tr, checkbox.checked);
+        });
+
+        // event: arrow click toggles expanded row
+        arrow.addEventListener('click', ()=>{
+          const isOpen = arrow.classList.toggle('open');
+          toggleExpandedRow(tr, isOpen, item);
+        });
+
+        tbody.appendChild(tr);
+      });
+
+      // After re-render, ensure submit state reflects selections
+      updateSubmitState();
+    }
+
+    function toggleExpandedRow(row, open, item){
+      // remove existing expanded row for this id
+      const next = row.nextElementSibling;
+      if(open){
+        // insert expanded row
+        const exp = document.createElement('tr');
+        exp.className = 'expanded-row';
+        exp.dataset.expandedFor = row.dataset.id;
+        const td = document.createElement('td');
+        td.colSpan = 7;
+        td.innerHTML = `<strong>${item.name} — Details</strong><div class="small">Teacher: ${item.teacher} | Grade: ${item.grade} | Comments: Effort is appreciated.</div>`;
+        exp.appendChild(td);
+        if(next && next.classList && next.classList.contains('expanded-row')){
+          // already there — do nothing
+        } else {
+          row.parentNode.insertBefore(exp, row.nextSibling);
+        }
+      } else {
+        if(next && next.classList && next.classList.contains('expanded-row')){
+          next.remove();
+        }
+      }
+    }
+
+    function handleRowSelection(row, checked){
+      if(checked){
+        row.classList.add('selected');
+        // add Edit and Delete buttons if not present
+        const editCol = row.querySelector('.edit-col');
+        const deleteCol = row.querySelector('.delete-col');
+        if(!editCol.querySelector('button.edit-btn')){
+          const editBtn = document.createElement('button');
+          editBtn.textContent='Edit'; editBtn.className='edit-btn';
+          editBtn.addEventListener('click', ()=>openEditModal(row));
+          editCol.appendChild(editBtn);
+        }
+        if(!deleteCol.querySelector('button.delete-btn')){
+          const delBtn = document.createElement('button');
+          delBtn.textContent='Delete'; delBtn.className='delete-btn';
+          delBtn.addEventListener('click', ()=>deleteRow(row));
+          deleteCol.appendChild(delBtn);
+        }
+      } else {
+        row.classList.remove('selected');
+        // hide edit/delete in deselected row
+        const editCol = row.querySelector('.edit-col');
+        const deleteCol = row.querySelector('.delete-col');
+        editCol.innerHTML=''; deleteCol.innerHTML='';
+      }
+      updateSubmitState();
+    }
+
+    function updateSubmitState(){
+      const anyChecked = !!document.querySelector('.row-checkbox:checked');
+      if(anyChecked){
+        submitBtn.disabled = false;
+        submitBtn.classList.add('enabled');
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.remove('enabled');
+      }
+    }
+
+    function findSmallestMissingId(){
+      const ids = new Set(data.map(d=>d.id));
+      let i=1; while(true){ if(!ids.has(i)) return i; i++; }
+    }
+
+    addBtn.addEventListener('click', ()=>{
+      try{
+        const newId = findSmallestMissingId();
+        const newStudent = {id:newId,name:`Student ${newId}`,teacher:`Teacher ${newId}`,grade:'B'};
+        data.push(newStudent);
+        render();
+        alert(`${newStudent.name} Record added successfully`);
+      }catch(err){
+        alert('Error adding record');
+      }
+    });
+
+    function deleteRow(row){
+      const id = Number(row.dataset.id);
+      const item = data.find(d=>d.id===id);
+      if(!item) return;
+      // remove any expanded row next to it
+      const next = row.nextElementSibling;
+      if(next && next.classList && next.classList.contains('expanded-row')) next.remove();
+      // remove from data
+      data = data.filter(d=>d.id!==id);
+      render();
+      alert(`${item.name} Record deleted successfully`);
+    }
+
+    // EDIT modal handling
+    const modal = document.getElementById('modalBackdrop');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalInput = document.getElementById('modalInput');
+    const modalOk = document.getElementById('modalOk');
+    const modalCancel = document.getElementById('modalCancel');
+    let editingRowId = null;
+
+    function openEditModal(row){
+      const id = Number(row.dataset.id);
+      editingRowId = id;
+      modalTitle.textContent = `Edit details of Student ${id}`;
+      modalInput.value = '';
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+      modalInput.focus();
+    }
+    modalCancel.addEventListener('click', ()=>{ modal.style.display='none'; modal.setAttribute('aria-hidden','true'); editingRowId=null; });
+    modalOk.addEventListener('click', ()=>{
+      const val = modalInput.value.trim();
+      modal.style.display='none';
+      modal.setAttribute('aria-hidden','true');
+      if(val.length>0){
+        alert(`Student ${editingRowId} data updated successfully`);
+      } else {
+        // treat as cancel per requirement? They said if you have some data inside the field show success, so otherwise do nothing
+      }
+      editingRowId = null;
+    });
+
+    // Submit button: show names of selected
+    submitBtn.addEventListener('click', ()=>{
+      const checked = Array.from(document.querySelectorAll('.row-checkbox:checked'));
+      const names = checked.map(cb=>{
+        const r = cb.closest('tr');
+        return r.querySelector('td:nth-child(3)').textContent;
+      });
+      alert('Submitting: ' + names.join(', '));
+    });
+
+    // Initial render with table not expanded and submit disabled
+    render();
+
+    // ensure no rows expanded on load (they aren't)
+  </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Form - Assignment 4</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Feedback Form</h1>
+      <p class="subtitle">Love something? Hate something? Let us know!</p>
+      <p><strong>Note:</strong> Fields marked with an asterisk (*) are mandatory</p>
+      <button id="chatToggle" class="chatbot-btn" aria-controls="chatWindow">AI Assistant</button>
+    </header>
+
+    <section class="chat-window" id="chatWindow" aria-live="polite" hidden>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Ask me a question…" aria-label="Chat input">
+        <button id="chatSend">Send</button>
+      </div>
+    </section>
+
+    <main>
+      <form id="feedbackForm" novalidate>
+        <fieldset>
+          <legend>Personal Information</legend>
+          
+          <label>Title*:</label>
+          <div class="inline-options">
+            <label><input type="radio" name="title" value="Miss" required> Miss</label>
+            <label><input type="radio" name="title" value="Mr."> Mr.</label>
+            <label><input type="radio" name="title" value="Mrs."> Mrs.</label>
+          </div>
+          <span class="error" id="titleError"></span>
+
+          <label for="firstName">First Name*:</label>
+          <input type="text" id="firstName" placeholder="First Name" autocomplete="given-name">
+          <span class="error" id="firstNameError"></span>
+
+          <label for="lastName">Last Name*:</label>
+          <input type="text" id="lastName" placeholder="Last Name" autocomplete="family-name">
+          <span class="error" id="lastNameError"></span>
+
+          <label for="emailId">Email Id*:</label>
+          <input type="email" id="emailId" placeholder="yourname@northeastern.edu" autocomplete="email">
+          <span class="error" id="emailIdError"></span>
+
+          <label for="phoneNumber">Phone Number*:</label>
+          <input type="text" id="phoneNumber" placeholder="(XXX) XXX-XXXX" maxlength="14" autocomplete="tel">
+          <span class="error" id="phoneNumberError"></span>
+
+          <label for="zipcode">Zip Code*:</label>
+          <input type="text" id="zipcode" placeholder="12345" autocomplete="postal-code">
+          <span class="error" id="zipcodeError"></span>
+
+          <label for="addr1">Street Address 1*:</label>
+          <input type="text" id="addr1" autocomplete="address-line1">
+          <span class="error" id="addr1Error"></span>
+
+          <label for="addr2">Street Address 2:</label>
+          <input type="text" id="addr2" maxlength="20" autocomplete="address-line2">
+          <span id="charCounter">0/20 characters used</span>
+        </fieldset>
+
+        <fieldset>
+          <legend>Feedback</legend>
+
+          <div class="form-row">
+  <label for="comments">Comments*:</label>
+  <textarea id="comments"></textarea>
+  <span class="error" id="commentsError"></span>
+</div>
+
+          <label for="myList">Choose Food Item:</label>
+          <select id="myList">
+            <option value="">--Select--</option>
+            <option value="Hamburger">Hamburger</option>
+            <option value="White sauce Pasta">White sauce Pasta</option>
+            <option value="Cheese Pizza">Cheese Pizza</option>
+            <option value="Spicy Biryani">Spicy Biryani</option>
+            <option value="Peri Peri Fries">Peri Peri Fries</option>
+          </select>
+          <div id="dynamicArea"></div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" id="submitBtn" disabled>Submit</button>
+          <button type="reset">Reset</button>
+        </div>
+      </form>
+    </main>
+
+    <div class="container">
+  <main>
+    <form id="feedbackForm"> ... </form>
+
+    <!-- keep results here so it stays inside the beige box -->
+    <section id="results"></section>
+  </main>
+</div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

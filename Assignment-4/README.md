@@ -21,5 +21,3 @@ This project implements a validated feedback form with:
 - HTML5 (semantic)
 - CSS3 (responsive, accessible styling)
 - Vanilla JavaScript (modular, no dependencies)
-
-By sharath

@@ -130,13 +130,6 @@ button:disabled {
   background: #f1f7ff;
 }
 
-/* Make certain columns wider for readability */
-#results td:nth-child(9), /* Comments */
-#results td:nth-child(10) { /* Option */
-  min-width: 150px;
-  word-wrap: break-word;
-}
-
 /* Chatbot */
 .chatbot-btn {
   position: fixed;

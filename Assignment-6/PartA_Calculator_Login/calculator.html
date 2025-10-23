@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Calculator • Assignment 6 – Part A</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <main class="container" id="app">
+    <header>
+      <h1 id="welcome">Welcome!</h1>
+      <div class="row">
+        <button id="logout" class="btn danger">Logout</button>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="card" style="grid-column: span 12;">
+        <h2>Calculator</h2>
+        <div class="grid">
+          <div style="grid-column: span 6;">
+            <label for="num1">Number 1</label>
+            <input id="num1" type="text" inputmode="decimal" placeholder="e.g., 12.5"/>
+            <div id="n1err" class="error">Please enter a valid number</div>
+          </div>
+          <div style="grid-column: span 6;">
+            <label for="num2">Number 2</label>
+            <input id="num2" type="text" inputmode="decimal" placeholder="e.g., -3"/>
+            <div id="n2err" class="error">Please enter a valid number</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+          <button class="btn" data-op="add">Add</button>
+          <button class="btn secondary" data-op="subtract">Subtract</button>
+          <button class="btn success" data-op="multiply">Multiply</button>
+          <button class="btn warn" data-op="divide">Divide</button>
+        </div>
+
+        <div style="margin-top:16px">
+          <label>Result</label>
+          <div id="result" class="result" aria-live="polite">—</div>
+        </div>
+
+        <div id="calcMsg" class="notice">Calculated!</div>
+      </div>
+    </section>
+  </main>
+
+<script>
+$(function(){
+  // Auth check
+  const rawLocal = localStorage.getItem("a6_session");
+  const rawSess = sessionStorage.getItem("a6_session");
+  const sessionObj = rawLocal ? JSON.parse(rawLocal) : (rawSess ? JSON.parse(rawSess) : null);
+  if(!sessionObj || !sessionObj.isLoggedIn){
+    // not logged in → redirect
+    window.location.href = "login.html";
+    return;
+  }
+  $("#welcome").text(`Welcome, ${sessionObj.username}!`);
+
+  // Single arrow function for all operations
+  const calculate = (num1, num2, operation) => {
+    switch(operation){
+      case 'add': return num1 + num2;
+      case 'subtract': return num1 - num2;
+      case 'multiply': return num1 * num2;
+      case 'divide': 
+        if(num2 === 0) return "Cannot divide by zero";
+        return num1 / num2;
+      default: return "Invalid op";
+    }
+  };
+
+  const $n1 = $("#num1"), $n2 = $("#num2");
+  const numRegex = /^[+-]?\d*(?:\.\d+)?$/;
+
+  function getValue($el, $err){
+    const v = $el.val().trim();
+    const ok = v.length>0 && numRegex.test(v);
+    $err[ok? "slideUp":"slideDown"](120);
+    return ok ? Number(v) : null;
+  }
+
+  // live clear errors on focus
+  $n1.on("focus", ()=>$("#n1err").slideUp(100));
+  $n2.on("focus", ()=>$("#n2err").slideUp(100));
+
+  $("button[data-op]").on("click", function(){
+    const op = $(this).data("op");
+    const v1 = getValue($n1, $("#n1err"));
+    const v2 = getValue($n2, $("#n2err"));
+    if(v1 === null || v2 === null){
+      $("#result").fadeOut(80).text("—").fadeIn(80);
+      return;
+    }
+    const out = calculate(v1, v2, op);
+    $("#result").fadeOut(80).queue(function(next){
+      $(this).text(out);
+      next();
+    }).fadeIn(120);
+    $("#calcMsg").hide().slideDown(120).delay(900).slideUp(120);
+  });
+
+  $("#logout").on("click", function(){
+    $("#app").fadeOut(250, function(){
+      localStorage.removeItem("a6_session");
+      sessionStorage.removeItem("a6_session");
+      window.location.href = "login.html";
+    });
+  });
+});
+</script>
+</body>
+</html>

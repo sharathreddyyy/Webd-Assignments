@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Login • Assignment 6 – Part A</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Assignment 6 – Part A · Login</h1>
+      <span class="kbd">jQuery + ES6</span>
+    </header>
+
+    <section class="card">
+      <h2>Sign in</h2>
+      <p>Use your Northeastern email to continue.</p>
+
+      <div class="spacer"></div>
+
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="you@northeastern.edu" autocomplete="username" />
+      <div id="emailError" class="error">Please enter a valid Northeastern email</div>
+
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="••••••••" autocomplete="current-password"/>
+      <div id="passwordError" class="error"></div>
+
+      <div class="row" style="margin-top:10px">
+        <label style="display:flex;align-items:center;gap:8px">
+          <input id="remember" type="checkbox"/> Remember me
+        </label>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <button id="loginBtn" class="btn" disabled>Login</button>
+      </div>
+
+      <div id="formError" class="error" style="display:none; margin-top:10px">Invalid email or password</div>
+      <div id="success" class="notice">Login successful! Redirecting…</div>
+    </section>
+
+    <p class="footer-note">Hardcoded users: demo@northeastern.edu / Pass@123, husky@northeastern.edu / Husky@123</p>
+  </main>
+
+<script>
+$(function(){
+  const users = [
+    { email: "demo@northeastern.edu", password: "Pass@123" },
+    { email: "husky@northeastern.edu", password: "Husky@123" }
+  ];
+
+  const $email = $("#email");
+  const $password = $("#password");
+  const $loginBtn = $("#loginBtn");
+
+  function validateEmail(val){
+    if(!val) return "Please enter a valid Northeastern email";
+    const ok = /^[\w.+-]+@northeastern\.edu$/i.test(val.trim());
+    return ok ? "" : "Please enter a valid Northeastern email";
+  }
+  function validatePassword(val){
+    if(!val) return "Password is required";
+    if(val.length < 8) return "Password must be at least 8 characters";
+    return "";
+  }
+  function toggleBtn(){
+    const ee = validateEmail($email.val());
+    const pe = validatePassword($password.val());
+    $loginBtn.prop("disabled", !!(ee || pe));
+  }
+
+  // Live validation
+  $email.on("keyup blur", function(){
+    const msg = validateEmail($email.val());
+    $("#emailError").text(msg)[msg? "slideDown":"slideUp"](150);
+    toggleBtn();
+  }).on("focus", function(){ $("#emailError").slideUp(100); $("#formError").hide(); });
+
+  $password.on("keyup blur", function(){
+    const msg = validatePassword($password.val());
+    $("#passwordError").text(msg)[msg? "slideDown":"slideUp"](150);
+    toggleBtn();
+  }).on("focus", function(){ $("#passwordError").slideUp(100); $("#formError").hide(); });
+
+  $("#loginBtn").on("click", function(e){
+    e.preventDefault();
+    const email = $email.val().trim();
+    const password = $password.val();
+
+    const emailErr = validateEmail(email);
+    const passErr = validatePassword(password);
+    if(emailErr || passErr){
+      $("#emailError").text(emailErr)[emailErr? "slideDown":"slideUp"](150);
+      $("#passwordError").text(passErr)[passErr? "slideDown":"slideUp"](150);
+      toggleBtn();
+      return;
+    }
+
+    const found = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+    if(!found){
+      $("#formError").hide().text("Invalid email or password").fadeIn(150);
+      return;
+    }
+
+    const username = email.split("@")[0];
+    const sessionObj = {
+      username,
+      email,
+      loginTs: new Date().toISOString(),
+      isLoggedIn: true
+    };
+
+    const storage = $("#remember").is(":checked") ? localStorage : sessionStorage;
+    storage.setItem("a6_session", JSON.stringify(sessionObj));
+
+    $("#success").hide().slideDown(200);
+    setTimeout(()=>{
+      window.location.href = "calculator.html";
+    }, 2000);
+  });
+});
+</script>
+</body>
+</html>

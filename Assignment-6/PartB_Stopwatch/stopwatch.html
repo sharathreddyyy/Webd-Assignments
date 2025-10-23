@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Event Stopwatch • Assignment 6 – Part B</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Assignment 6 – Part B · Event Stopwatch</h1>
+      <span class="kbd">Async/Await + Promises + jQuery</span>
+    </header>
+
+    <section class="card">
+      <h2>Timer</h2>
+      <div id="timer" style="font-size:56px; font-weight:800; letter-spacing:1px; text-align:center">00:00:00</div>
+
+      <div class="grid" style="margin-top:14px">
+        <div style="grid-column: span 6;">
+          <label for="date">Date</label>
+          <input id="date" type="date"/>
+          <div id="dateErr" class="error">Please select a date</div>
+        </div>
+        <div style="grid-column: span 6;">
+          <label for="eventName">Event Name</label>
+          <input id="eventName" type="text" placeholder="What are you timing?"/>
+          <div id="nameErr" class="error"></div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <button id="start" class="btn">Start</button>
+        <button id="pause" class="btn warn" disabled>Pause</button>
+        <button id="resume" class="btn success" disabled>Resume</button>
+        <button id="stop" class="btn danger" disabled>Stop & Save</button>
+        <button id="reset" class="btn secondary">Reset</button>
+      </div>
+
+      <div id="note" class="notice">Saved!</div>
+    </section>
+
+    <section class="card" style="margin-top:16px">
+      <h2>History</h2>
+      <div class="row" style="margin-bottom:10px">
+        <label for="filterDate">Filter by date</label>
+        <input id="filterDate" type="date"/>
+        <button id="clearFilter" class="btn secondary">Clear Filter</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><strong>Total Sessions</strong><div id="statCount">0</div></div>
+        <div class="stat"><strong>Total Time</strong><div id="statTime">00:00:00</div></div>
+      </div>
+
+      <div id="history" class="hist">
+        <div id="empty">No sessions recorded yet</div>
+      </div>
+    </section>
+
+    <p class="footer-note">Fields are disabled while the timer is running.</p>
+  </main>
+
+<script>
+$(function(){
+  const $timer = $("#timer");
+  const $date = $("#date");
+  const $name = $("#eventName");
+  const $dateErr = $("#dateErr");
+  const $nameErr = $("#nameErr");
+
+  const $start = $("#start"), $pause = $("#pause"), $resume = $("#resume"), $stop = $("#stop"), $reset = $("#reset");
+  const $note = $("#note");
+  const $history = $("#history"), $empty = $("#empty");
+  const $filter = $("#filterDate"), $clearFilter = $("#clearFilter");
+
+  // init date
+  const todayStr = new Date().toISOString().slice(0,10);
+  $date.val(todayStr);
+
+  let seconds = 0;
+  let running = false;
+  let intervalId = null;
+
+  const nameRegex = /^[A-Za-z0-9 \-']{3,100}$/;
+
+  function fmt(sec){
+    const h = Math.floor(sec/3600).toString().padStart(2,'0');
+    const m = Math.floor((sec%3600)/60).toString().padStart(2,'0');
+    const s = (sec%60).toString().padStart(2,'0');
+    return `${h}:${m}:${s}`;
+  }
+
+  function validateInputs(){
+    let ok = true;
+    if(!$date.val()){
+      $dateErr.text("Please select a date").slideDown(120);
+      ok = false;
+    }
+    const nm = $name.val().trim();
+    if(!nm){
+      $nameErr.text("Event name is required").slideDown(120);
+      ok = false;
+    } else if(nm.length < 3){
+      $nameErr.text("Event name must be at least 3 characters").slideDown(120);
+      ok = false;
+    } else if(nm.length > 100){
+      $nameErr.text("Event name too long (max 100 characters)").slideDown(120);
+      ok = false;
+    } else if(!nameRegex.test(nm)){
+      $nameErr.text("Event name contains invalid characters").slideDown(120);
+      ok = false;
+    }
+    return ok;
+  }
+
+  $date.on("focus", ()=> $dateErr.slideUp(100));
+  $name.on("focus", ()=> $nameErr.slideUp(100));
+
+  function setDisabled(disabled){
+    $date.prop("disabled", disabled);
+    $name.prop("disabled", disabled);
+    $start.prop("disabled", disabled);
+    $pause.prop("disabled", !disabled); // once running, allow pause
+    $stop.prop("disabled", !disabled);
+  }
+
+  function saveSession(date, name, duration){
+    const item = { id: Date.now(), date, name, duration };
+    const arr = JSON.parse(localStorage.getItem("a6_sessions")||"[]");
+    arr.push(item);
+    localStorage.setItem("a6_sessions", JSON.stringify(arr));
+    return item;
+  }
+
+  function loadSessions(){
+    return JSON.parse(localStorage.getItem("a6_sessions")||"[]");
+  }
+
+  function renderSessions(){
+    const arr = loadSessions().sort((a,b)=> b.id - a.id);
+    const filterVal = $filter.val();
+    $history.empty();
+    let total = 0;
+    let count = 0;
+    arr.forEach(s=>{
+      if(filterVal && s.date !== filterVal) return;
+      count++;
+      total += s.duration;
+      const $row = $(`
+        <div class="hist-item">
+          <div><strong>${s.date}</strong></div>
+          <div>${$("<div>").text(s.name).html()}</div>
+          <div style="text-align:right"><strong>${fmt(s.duration)}</strong></div>
+        </div>
+      `);
+      $history.append($row);
+    });
+    if(count === 0){
+      $history.append('<div id="empty">No sessions recorded yet</div>');
+    }
+    $("#statCount").text(count);
+    $("#statTime").text(fmt(total));
+  }
+
+  async function startTimer(){
+    if(!validateInputs()) return;
+    seconds = 0;
+    $timer.text(fmt(seconds));
+    running = true;
+    setDisabled(true);
+    $resume.prop("disabled", true);
+    $pause.prop("disabled", false);
+
+    await new Promise(resolve => {
+      intervalId = setInterval(()=>{
+        seconds++;
+        $timer.text(fmt(seconds));
+      }, 1000);
+      // resolver saved to be called on stop
+      $stop.data("resolver", resolve);
+    });
+  }
+
+  function pauseTimer(){
+    if(!running) return;
+    clearInterval(intervalId);
+    intervalId = null;
+    running = false;
+    $pause.prop("disabled", true);
+    $resume.prop("disabled", false);
+  }
+
+  function resumeTimer(){
+    if(running) return;
+    running = true;
+    $pause.prop("disabled", false);
+    $resume.prop("disabled", true);
+    intervalId = setInterval(()=>{
+      seconds++;
+      $timer.text(fmt(seconds));
+    }, 1000);
+  }
+
+  function stopTimer(){
+    if(intervalId) clearInterval(intervalId);
+    intervalId = null;
+    const resolve = $stop.data("resolver");
+    if(typeof resolve === "function") resolve(); // resolve the promise in startTimer
+    running = false;
+    setDisabled(false);
+    $pause.prop("disabled", true);
+    $resume.prop("disabled", true);
+  }
+
+  // Wire buttons
+  $start.on("click", ()=> startTimer());
+  $pause.on("click", ()=> pauseTimer());
+  $resume.on("click", ()=> resumeTimer());
+  $stop.on("click", ()=>{
+    stopTimer();
+    const item = saveSession($date.val(), $name.val().trim(), seconds);
+    $note.hide().text("Saved!").slideDown(120).delay(1000).slideUp(120);
+    renderSessions();
+  });
+  $reset.on("click", ()=>{
+    if(intervalId) clearInterval(intervalId);
+    intervalId = null;
+    seconds = 0;
+    running = false;
+    $timer.text("00:00:00");
+    setDisabled(false);
+    $pause.prop("disabled", true);
+    $resume.prop("disabled", true);
+  });
+
+  // filtering
+  $filter.on("change", renderSessions);
+  $clearFilter.on("click", ()=> { $filter.val(""); renderSessions(); });
+
+  // initial
+  $pause.prop("disabled", true);
+  $resume.prop("disabled", true);
+  $stop.prop("disabled", true);
+  renderSessions();
+
+  // while running, Stop is enabled
+  const origSetDisabled = setDisabled;
+  setDisabled = function(disabled){
+    $date.prop("disabled", disabled);
+    $name.prop("disabled", disabled);
+    $start.prop("disabled", disabled);
+    $pause.prop("disabled", !disabled);
+    $stop.prop("disabled", !disabled);
+  }
+});
+</script>
+</body>
+</html>

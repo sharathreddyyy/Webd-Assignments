@@ -139,5 +139,3 @@ git push -u origin main
 - Make the repo **Private** and add your instructor/TA as a collaborator if requested.
 - Upload the **ZIP** of this folder to Canvas.
 - Paste the **GitHub URL** into Canvas remarks.
-
-Good luck, and happy hacking! 🏏

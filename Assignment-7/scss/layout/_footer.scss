@@ -1,0 +1,9 @@
+// _footer.scss
+@use '../utilities/functions' as f;
+@use '../utilities/variables' as v;
+
+.site-footer {
+  padding: f.spacing(6) 0;
+  border-top: 1px solid v.$border;
+  background: white;
+}

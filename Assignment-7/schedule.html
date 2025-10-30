@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Northeastern Cricket Hub — Schedule</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container flex between center-y">
+      <a class="brand" href="index.html">Northeastern <span>Cricket</span> Hub</a>
+      <nav class="main-nav">
+        <ul class="flex gap-3">
+          <li><a class="nav-link" href="index.html">Home</a></li>
+          <li><a class="nav-link active" href="schedule.html">Schedule</a></li>
+          <li><a class="btn btn--sm" href="index.html#join">Join</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- SCHEDULE (Flexbox table-ish) -->
+    <section class="section">
+      <div class="container">
+        <h1 class="section__title">Upcoming Events</h1>
+        <div class="schedule">
+          <div class="schedule__row schedule__row--head flex between">
+            <span>Date</span><span>Event</span><span>Location</span><span>Type</span>
+          </div>
+          <div id="open-practice" class="schedule__row flex between">
+            <span>Nov 2</span><span>Open Practice</span><span>Carter Field</span><span>Practice</span>
+          </div>
+          <div id="matches" class="schedule__row flex between">
+            <span>Nov 9</span><span>NU vs BU</span><span>Moakley Park</span><span>Match</span>
+          </div>
+          <div id="clinics" class="schedule__row flex between">
+            <span>Nov 16</span><span>Bowling Clinic</span><span>Marino Center</span><span>Clinic</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA GRID (Grid layout) -->
+    <section class="section section--alt">
+      <div class="container">
+        <h2 class="section__title">Get Involved</h2>
+        <div class="cta-grid">
+          <a class="cta" href="#">Volunteer</a>
+          <a class="cta" href="#">Sponsor</a>
+          <a class="cta" href="#">Mentor</a>
+          <a class="cta" href="#">Donate</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container flex between wrap center-y">
+      <p>© 2025 Northeastern Cricket Hub</p>
+      <ul class="flex gap-2">
+        <li><a class="nav-link" href="#">Instagram</a></li>
+        <li><a class="nav-link" href="#">Facebook</a></li>
+        <li><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>

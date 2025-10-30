@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Northeastern Cricket Hub — Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container flex between center-y">
+      <a class="brand" href="index.html">Northeastern <span>Cricket</span> Hub</a>
+      <nav class="main-nav">
+        <ul class="flex gap-3">
+          <li><a class="nav-link active" href="index.html">Home</a></li>
+          <li><a class="nav-link" href="schedule.html">Schedule</a></li>
+          <li><a class="btn btn--sm" href="#join">Join</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO (Flexbox) -->
+    <section class="hero flex center">
+      <div class="hero__content">
+        <h1 class="hero__title">Play hard. Learn fast. Win together.</h1>
+        <p class="hero__subtitle">Boston’s student-led cricket community at Northeastern. Open practices, league matches, coaching clinics.</p>
+        <div class="flex gap-2 wrap">
+          <a href="schedule.html" class="btn">View Schedule</a>
+          <a href="#programs" class="btn btn--outline">Explore Programs</a>
+        </div>
+      </div>
+      <div class="hero__art">
+        <img src="./assets/img/hero.jpg" alt="Cricket illustration" />
+      </div>
+    </section>
+
+    <!-- FEATURE CARDS (Flexbox using placeholder + mixins) -->
+    <section id="programs" class="section">
+      <div class="container">
+        <h2 class="section__title">Programs</h2>
+        <div class="card-row flex wrap gap-2">
+          <article class="card card--accent">
+            <h3>Open Practice</h3>
+            <p>Weekly sessions focused on fitness, nets, and match simulations.</p>
+            <a class="link" href="schedule.html#open-practice">See times →</a>
+          </article>
+          <article class="card">
+            <h3>League Matches</h3>
+            <p>Compete in intramural and intercollegiate fixtures across New England.</p>
+            <a class="link" href="schedule.html#matches">Upcoming games →</a>
+          </article>
+          <article class="card">
+            <h3>Coaching Clinics</h3>
+            <p>Skill labs on batting, bowling, and fielding with invited mentors.</p>
+            <a class="link" href="schedule.html#clinics">Book a spot →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY GRID (CSS Grid #1) -->
+    <section class="section section--alt">
+      <div class="container">
+        <h2 class="section__title">Moments</h2>
+        <div class="gallery-grid">
+          <img src="./assets/img/pic1.svg" alt="Celebration">
+          <img src="./assets/img/pic2.svg" alt="Bowling action">
+          <img src="./assets/img/pic3.svg" alt="Team huddle">
+          <img src="./assets/img/pic4.svg" alt="Cover drive">
+          <img src="./assets/img/pic5.svg" alt="Slip cordon">
+          <img src="./assets/img/pic6.svg" alt="Victory">
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING/DUES GRID (CSS Grid #2 + function & map usage) -->
+    <section id="join" class="section">
+      <div class="container">
+        <h2 class="section__title">Join the Club</h2>
+        <div class="pricing-grid">
+          <article class="price">
+            <h3>Member</h3>
+            <p class="price__value">$25/term</p>
+            <ul class="price__list">
+              <li>Practice access</li>
+              <li>Team selection</li>
+              <li>Club kit discounts</li>
+            </ul>
+            <a class="btn btn--block" href="#">Get Started</a>
+          </article>
+          <article class="price price--highlight">
+            <h3>Pro</h3>
+            <p class="price__value">$45/term</p>
+            <ul class="price__list">
+              <li>Everything in Member</li>
+              <li>Clinic priority</li>
+              <li>Match-day perks</li>
+            </ul>
+            <a class="btn btn--block" href="#">Go Pro</a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container flex between wrap center-y">
+      <p>© 2025 Northeastern Cricket Hub</p>
+      <ul class="flex gap-2">
+        <li><a class="nav-link" href="#">Instagram</a></li>
+        <li><a class="nav-link" href="#">Facebook</a></li>
+        <li><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>

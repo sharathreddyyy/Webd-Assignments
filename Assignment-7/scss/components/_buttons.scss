@@ -1,0 +1,16 @@
+// _buttons.scss
+@use '../utilities/variables' as v;
+@use '../utilities/functions' as f;
+@use '../utilities/mixins' as m;
+
+.btn {
+  @include m.button-base;
+  background: v.$primary; color: white;
+  &:hover { background: rgb(v.$primary-rgb / 90%); }
+  &--outline {
+    background: transparent; color: v.$text; border: 1px solid v.$border;
+    &:hover { color: v.$primary; border-color: v.$primary; }
+  }
+  &--sm { padding: f.spacing(1) f.spacing(2); font-size: .9rem; }
+  &--block { display: block; width: 100%; }
+}

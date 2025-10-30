@@ -1,0 +1,22 @@
+// _header.scss
+@use '../utilities/variables' as v;
+@use '../utilities/functions' as f;
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid v.$border;
+}
+
+.brand {
+  font-weight: 800; font-size: 1.2rem;
+  & > span { color: v.$primary; }
+}
+
+.main-nav .nav-link {
+  opacity: .85;
+  &.active, &:hover { opacity: 1; color: v.$primary; }
+}

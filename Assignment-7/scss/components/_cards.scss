@@ -1,0 +1,12 @@
+// _cards.scss
+@use '../utilities/mixins' as m;
+@use '../utilities/variables' as v;
+
+/* Placeholder selector reused across components */
+%card { @include m.card(); }
+
+.card {
+  @extend %card;
+  h3 { margin-top: 0; }
+  &--accent { border-color: map-get((accent: #0ea5e9), accent); }
+}

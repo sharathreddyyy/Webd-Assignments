@@ -1,0 +1,12 @@
+// _maps.scss (demonstrates maps + @each)
+$theme-colors: (
+  'accent': #0ea5e9,
+  'success': #10b981,
+  'warning': #f59e0b
+);
+$brand: #a21caf;
+
+@each $name, $value in $theme-colors {
+  .text-#{$name} { color: #{$value}; }
+  .bg-#{$name} { background: #{$value}; }
+}

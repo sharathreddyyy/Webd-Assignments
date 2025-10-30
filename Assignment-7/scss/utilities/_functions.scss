@@ -1,0 +1,13 @@
+// _functions.scss
+@use 'variables' as v;
+
+$base-space: 8px;
+
+@function spacing($n) {
+  @return calc(#{$n} * #{$base-space});
+}
+
+// Example color function (lighten/darken alternative with mix)
+@function tint($color, $percent) {
+  @return mix(white, $color, $percent);
+}

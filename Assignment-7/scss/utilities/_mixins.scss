@@ -1,0 +1,26 @@
+// _mixins.scss
+@use 'variables' as v;
+@use 'functions' as f;
+
+@mixin card($pad: f.spacing(4)) {
+  padding: $pad;
+  background: white;
+  border: 1px solid v.$border;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+@mixin button-base {
+  display: inline-block;
+  padding: f.spacing(2) f.spacing(3);
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-align: center;
+  transition: transform .15s ease, background .2s ease, color .2s ease;
+  &:active { transform: translateY(1px); }
+}
+
+@mixin breakpoint($name) {
+  $map: (sm: 480px, md: 800px, lg: 1024px);
+  @media (max-width: map-get($map, $name)) { @content; }
+}

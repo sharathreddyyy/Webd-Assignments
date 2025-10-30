@@ -1,0 +1,144 @@
+// main.scss - entry point
+@use 'utilities/variables';
+@use 'utilities/functions';
+@use 'utilities/mixins';
+@use 'utilities/maps';
+@use 'base/reset';
+@use 'layout/header';
+@use 'layout/footer';
+@use 'layout/grid';
+@use 'components/buttons';
+@use 'components/cards';
+
+:root {
+  /* CSS Custom Properties used alongside SASS variables */
+  --radius: 16px;
+  --shadow: 0 10px 30px rgba(0,0,0,.08);
+  --brand: #{maps.$brand}; // interpolation of map value into custom property
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: variables.$font;
+  color: variables.$text;
+  background: variables.$bg;
+  line-height: 1.6;
+}
+
+a { color: variables.$primary; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+.container {
+  width: min(1100px, 92vw);
+  margin-inline: auto;
+  padding: functions.spacing(4);
+}
+
+.section {
+  padding: functions.spacing(8) 0;
+  &__title { font-size: clamp(1.4rem, 2.5vw, 2rem); margin-bottom: functions.spacing(4); }
+  &--alt { background: variables.$surface; }
+}
+
+/* Utility Flex classes generated via loop + interpolation */
+.flex { display: flex; }
+.center { justify-content: center; align-items: center; }
+.center-y { align-items: center; }
+.between { justify-content: space-between; }
+.wrap { flex-wrap: wrap; }
+@for $i from 1 through 6 {
+  .gap-#{$i} { gap: functions.spacing($i); }
+}
+
+/* HERO (Flexbox) */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: functions.spacing(6);
+  padding: functions.spacing(10) 0;
+  &__title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; }
+  &__subtitle { max-width: 60ch; }
+  &__art { flex: 1 1 420px; filter: drop-shadow(var(--shadow)); }
+  &__content { flex: 1 1 420px; }
+}
+
+/* Gallery Grid (Grid #1) */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: 160px;
+  gap: functions.spacing(2);
+  & > img:nth-child(1) { grid-column: span 3; grid-row: span 2; }
+  & > img:nth-child(2) { grid-column: span 3; }
+  & > img:nth-child(3) { grid-column: span 2; }
+  & > img:nth-child(4) { grid-column: span 2; }
+  & > img:nth-child(5) { grid-column: span 2; }
+  & > img:nth-child(6) { grid-column: span 6; }
+}
+
+/* Pricing Grid (Grid #2) */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: functions.spacing(3);
+}
+
+.price {
+  @extend %card;
+  text-align: left;
+  &__value { font-size: 2rem; font-weight: 800; margin: functions.spacing(2) 0; }
+  &__list { margin: 0; padding-left: functions.spacing(4); }
+  &--highlight {
+    border-color: variables.$primary;
+    box-shadow: 0 20px 40px rgba(variables.$primary-rgb, .15);
+  }
+}
+
+/* Schedule rows (Flexbox) */
+.schedule {
+  border: 1px solid variables.$border;
+  border-radius: var(--radius);
+  overflow: hidden;
+  &__row {
+    display: flex;
+    padding: functions.spacing(3);
+    gap: functions.spacing(3);
+    border-bottom: 1px solid variables.$border;
+    &--head { background: variables.$surface; font-weight: 600; }
+    &:last-child { border-bottom: none; }
+    & > span { width: 25%; }
+  }
+}
+
+/* CTA grid (additional Grid usage) */
+.cta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: functions.spacing(2);
+}
+.cta {
+  display: grid;
+  place-items: center;
+  padding: functions.spacing(5);
+  border: 1px dashed variables.$border;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: transform .2s ease;
+  &:hover { transform: translateY(-2px); }
+}
+
+/* Responsive tweaks via mixin */
+@include mixins.breakpoint(md) {
+  .hero { flex-direction: column; text-align: center; }
+  .hero__art, .hero__content { flex: 1 1 auto; }
+}
+
+/* Dark mode opted-in via class using @if */
+.dark & {
+  @if variables.$enable-dark == true {
+    body { background: variables.$bg-dark; color: variables.$text-dark; }
+    .section--alt { background: variables.$surface-dark; }
+  }
+}

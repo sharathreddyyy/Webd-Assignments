@@ -1,0 +1,34 @@
+{
+  "name": "assignment8-secure-rest-api",
+  "version": "1.0.0",
+  "description": "Assignment 8 - Building Secure RESTful APIs with Node.js, Express, and MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "lint": "echo \"(optional)\""
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "bcrypt",
+    "multer",
+    "swagger",
+    "joi"
+  ],
+  "author": "Sharath Reddy Gummadi",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "joi": "^17.13.3",
+    "mongoose": "^8.6.1",
+    "multer": "^1.4.5-lts.1",
+    "swagger-ui-express": "^5.0.1",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

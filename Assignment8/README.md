@@ -50,5 +50,3 @@ This project implements the full requirements from *Assignment 8 – Building Se
 Import `Assignment8.postman_collection.json`, set `{{baseUrl}}` to `http://localhost:3000`.
 
 ---
-
-© 2025 — Implementation aligned with the assignment spec【7†files_uploaded_in_conversation】.

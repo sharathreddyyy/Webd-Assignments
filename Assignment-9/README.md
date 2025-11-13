@@ -53,7 +53,7 @@ It connects to the Node.js backend from Assignment 8 for **login** and **company
      - `AppBar`, `Toolbar`, `Button`, `Typography`, `Box`
      - `Card`, `CardContent`, `CardMedia`, `Chip`, `Grid`
      - Form controls (`TextField`, `Alert`, `Avatar`) in the login and contact pages.
-   - Ensures a clean, responsive UI.
+   - Ensures a clean, responsive UI. 
 
 6. **Version Control and Documentation**
    - Include this project in a Git repository:
@@ -151,7 +151,7 @@ npm start
      - Company Showcase (`/companies`)
      - Contact (`/contact`)
 
-## Notes for Submission
+
 
 - Ensure the backend API URLs in `src/api.js` match your actual endpoints.
 - Add screenshots of key pages (optional, for documentation).

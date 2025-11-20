@@ -1,4 +1,4 @@
-# Assignment 10 - Admin & Employee Portal with Redux
+# Assignment 10 - Admin & Employee Portal with Redux 
 
 This project implements the requirements for Assignment 10:
 
@@ -25,7 +25,7 @@ This project implements the requirements for Assignment 10:
 ```bash
 cd backend
 npm install
-cp .env.example .env   # adjust values if needed
+cp .env.example .env
 npm run dev
 ```
 
@@ -38,3 +38,4 @@ npm start
 ```
 
 Make sure the backend is running on `http://localhost:5000` so the frontend can communicate with it.
+
